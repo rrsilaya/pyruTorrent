@@ -20,8 +20,6 @@
 
 import xmlrpc.client
 import base64
-import requests
-import json
 import time
 import re
 import bencodepy
@@ -450,12 +448,12 @@ class RPCMethods(RPCMethodHelpers):
                 add_stopped and 'load.raw' or 'load.raw_start',
                 '',
                 data,
-                f'd.set_custom1={label}',
-                f'd.set_custom2=VRS24mrker{comment}',
-                f'd.set_custom=x-filename,{quote(name)}',
-                f'{"" if save_torrent else "d.delete_tied="}',
+                f'd.custom1.set={label}',
+                f'd.custom2.set=VRS24mrker{comment}',
+                f'd.custom.set=x-filename,{quote(name)}',
+                '' if save_torrent else 'd.delete_tied=',
                 f'execute=mkdir,-p,"{download_path}"',
-                f'{"d.set_directory=" if add_name_to_path else "d.set_directory_base="}"{download_path}"',
+                ('d.directory.set=' if add_name_to_path else f'd.directory_base.set=') + download_path,
                 ratio_group
             ),
             'hash': ('cat', '', _hash),
